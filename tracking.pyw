@@ -1,4 +1,5 @@
 from pywinauto import Desktop
+from swinlnk.swinlnk import SWinLnk
 import os
 import time
 import datetime
@@ -7,6 +8,14 @@ START = "start>"
 STOP = "stop>"
 DIRECTORY = os.path.dirname(os.path.realpath(__file__)) + "\\data\\"
 TARGET_PROGRAM_NAME = "AnyDesk"
+
+# add to startup
+user_path = os.path.expanduser('~') # path to user directory
+path_link = f"{user_path}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\{os.path.basename(__file__)}" + ".lnk"
+if not os.path.exists(path_link):
+    swl = SWinLnk()
+    swl.create_lnk(os.path.realpath(__file__), path_link)
+    print("Added to startup")
 
 # make directory where will be all info aboat working time
 if not os.path.exists(DIRECTORY):
