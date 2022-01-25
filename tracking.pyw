@@ -31,7 +31,7 @@ while True:
     # if u are still working but it's a new day
     if now.date().strftime("%d") != current_day and was_started == True:
         file = open(DIRECTORY + now.date().strftime("%Y_%m_") + current_day, 'a')
-        file.write(STOP + " " + now.time().strftime("%H:%M:%S") + '\n')
+        file.write(STOP + " " + "23:59:59" + '\n')
         file.close()
         
         current_day = now().date().strftime("%d")
@@ -51,14 +51,14 @@ while True:
     # start working
     if process_running == True and was_started == False:
         was_started = True
-        file = open(DIRECTORY + now.date().strftime("%Y_%m_%d"), 'a')
+        file = open(DIRECTORY + now.date().strftime("%Y_%m_") + current_day, 'a')
         file.write(START + " " + now.time().strftime("%H:%M:%S") + '\n')
         file.close()
 
     # stop working
     if process_running == False and was_started == True:
         was_started = False
-        file = open(DIRECTORY + now.date().strftime("%Y_%m_%d"), 'a')
+        file = open(DIRECTORY + now.date().strftime("%Y_%m_") + current_day, 'a')
         file.write(STOP + " " + now.time().strftime("%H:%M:%S") + '\n')
         file.close()    
 
