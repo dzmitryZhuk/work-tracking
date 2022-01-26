@@ -11,3 +11,8 @@ To use the script you need:
 ____
 
 All information about working time will be in `{folder where skript locate}\data\`
+____
+# Start script
+
+To start tracking work u need only double-click on `tracking.pyw`
+First running this script place shortcut to Windows autorun, so it'll be running always automatically.
