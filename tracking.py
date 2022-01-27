@@ -20,7 +20,7 @@ if not os.path.exists(path_link):
 # make directory where will be all info aboat working time
 if not os.path.exists(DIRECTORY):
     os.makedirs(DIRECTORY)
-    print("Added to startup")
+    print("Target folder created")
 
 was_started = False
 current_day = datetime.datetime.now().date().strftime("%d")
@@ -29,12 +29,13 @@ while True:
     now = datetime.datetime.now()
 
     # if u are still working but it's a new day
-    if now.date().strftime("%d") != current_day and was_started == True:
+    temp_day = now.date().strftime("%d")
+    if temp_day != current_day and was_started == True:
         file = open(DIRECTORY + now.date().strftime("%Y_%m_") + current_day, 'a')
         file.write(STOP + " " + "23:59:59" + '\n')
         file.close()
         
-        current_day = now().date().strftime("%d")
+        current_day = temp_day
 
         file = open(DIRECTORY + now.date().strftime("%Y_%m_") + current_day, 'a')
         file.write(START + " " + now.time().strftime("%H:%M:%S") + '\n')
