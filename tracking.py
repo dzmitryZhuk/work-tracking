@@ -10,22 +10,28 @@ DIRECTORY = os.path.dirname(os.path.realpath(__file__)) + "\\data\\"
 TARGET_PROGRAM_NAME = "AnyDesk"
 
 # add to startup
-user_path = os.path.expanduser('~') # path to user directory
-path_link = f"{user_path}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\{os.path.basename(__file__)}" + ".lnk"
-if not os.path.exists(path_link):
-    swl = SWinLnk()
-    swl.create_lnk(os.path.realpath(__file__), path_link)
-    print("Added to startup")
+def startup():
+    user_path = os.path.expanduser('~') # path to user directory
+    path_link = f"{user_path}\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\{os.path.basename(__file__)}" + ".lnk"
+    if not os.path.exists(path_link):
+        swl = SWinLnk()
+        swl.create_lnk(os.path.realpath(__file__), path_link)
+        print("Added to startup")
 
 # make directory where will be all info aboat working time
-if not os.path.exists(DIRECTORY):
-    os.makedirs(DIRECTORY)
-    print("Target folder created")
+def dir():
+    if not os.path.exists(DIRECTORY):
+        os.makedirs(DIRECTORY)
+        print("Target folder created")
+
+#########################################################################################
 
 was_started = False
 current_day = datetime.datetime.now().date().strftime("%d")
 
+startup()
 while True:
+    dir()
     now = datetime.datetime.now()
 
     # if u are still working but it's a new day
