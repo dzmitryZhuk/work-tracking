@@ -1,8 +1,8 @@
-from pywinauto import Desktop
 from swinlnk.swinlnk import SWinLnk
 import os
 import time
 import datetime
+import win32gui
 
 START = "start>"
 STOP = "stop>"
@@ -64,12 +64,13 @@ while True:
         process_running = {}
         for prog in PROGRAMS:
             process_running[prog] = False
-        windows = Desktop(backend="uia").windows()
-        for w in windows:
-            name = w.window_text()
-            for program_name in PROGRAMS:
-                if program_name.lower() in name.lower():
-                    process_running[program_name] = True
+        def winEnumHandler( hwnd, ctx ):
+            if win32gui.IsWindowVisible( hwnd ):
+                name = win32gui.GetWindowText( hwnd )
+                for program_name in PROGRAMS:
+                    if program_name.lower() in name.lower():
+                        process_running[program_name] = True
+        win32gui.EnumWindows( winEnumHandler, None )
         
         # start working
         for program_name in PROGRAMS:

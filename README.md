@@ -6,7 +6,6 @@ ____
 To use the script you need:
 1. [download python 3](https://www.python.org/downloads/)
 2. then write in command lines:
-    * pip3 install pywinauto
     * pip3 install swinlnk
 ____
 
