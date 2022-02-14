@@ -6,7 +6,7 @@ import win32gui
 
 START = "start>"
 STOP = "stop>"
-PROGRAMS = ["AnyDesk"]
+PROGRAMS = ["AnyDesk", "Skype"]
 DIRECTORY = os.path.dirname(os.path.realpath(__file__)) + "\\data\\"
 
 # add to startup
@@ -40,7 +40,7 @@ for prog in PROGRAMS:
     was_started[prog] = False
 current_day = datetime.datetime.now().date().strftime("%d")
 
-startup()
+#startup()
 while True:
     dir()
     now = datetime.datetime.now()
@@ -48,13 +48,13 @@ while True:
         # if u are still working but it's a new day
         temp_day = now.date().strftime("%d")
         if temp_day != current_day:
+            previous_day = current_day
+            current_day = temp_day
             for program_name in PROGRAMS:
                 if was_started[program_name] == True:
-                    file = open(DIRECTORY + '\\' + program_name + '\\' + now.date().strftime("%Y_%m_") + current_day, 'a')
+                    file = open(DIRECTORY + '\\' + program_name + '\\' + now.date().strftime("%Y_%m_") + previous_day, 'a')
                     file.write(STOP + " " + "23:59:59" + '\n')
                     file.close()
-                    
-                    current_day = temp_day
 
                     file = open(DIRECTORY + '\\' + program_name + '\\' + now.date().strftime("%Y_%m_") + current_day, 'a')
                     file.write(START + " " + now.time().strftime("%H:%M:%S") + '\n')

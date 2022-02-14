@@ -48,13 +48,13 @@ while True:
         # if u are still working but it's a new day
         temp_day = now.date().strftime("%d")
         if temp_day != current_day:
+            previous_day = current_day
+            current_day = temp_day
             for program_name in PROGRAMS:
                 if was_started[program_name] == True:
-                    file = open(DIRECTORY + '\\' + program_name + '\\' + now.date().strftime("%Y_%m_") + current_day, 'a')
+                    file = open(DIRECTORY + '\\' + program_name + '\\' + now.date().strftime("%Y_%m_") + previous_day, 'a')
                     file.write(STOP + " " + "23:59:59" + '\n')
                     file.close()
-                    
-                    current_day = temp_day
 
                     file = open(DIRECTORY + '\\' + program_name + '\\' + now.date().strftime("%Y_%m_") + current_day, 'a')
                     file.write(START + " " + now.time().strftime("%H:%M:%S") + '\n')
