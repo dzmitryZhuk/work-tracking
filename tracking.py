@@ -3,10 +3,24 @@ import os
 import time
 import datetime
 import win32gui
+import psutil
+import sys
+
+# checking running this script only one instance
+count = 0
+for p in psutil.process_iter():
+    if 'python' in p.name() and '.exe' in p.name():
+        for cmd_param in p.cmdline():
+            if os.path.basename(__file__) in cmd_param:
+                count = count + 1
+if count > 1:
+    print('Script is already running')
+    sys.exit(1)
+##################################################
 
 START = "start>"
 STOP = "stop>"
-PROGRAMS = ["AnyDesk", "Skype"]
+PROGRAMS = ["AnyDesk"]
 DIRECTORY = os.path.dirname(os.path.realpath(__file__)) + "\\data\\"
 
 # add to startup
