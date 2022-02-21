@@ -6,7 +6,7 @@ ____
 To use the script you need:
 1. [download python 3](https://www.python.org/downloads/)
 2. then write in command lines:
-    * pip3 install swinlnk
+    * [pip3 install swinlnk](https://pypi.org/project/swinlnk/)
 ____
 
 All information about working time will be in `{folder where skript locate}\data\`
