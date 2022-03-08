@@ -5,13 +5,17 @@ import datetime
 import win32gui
 import psutil
 import sys
+import re
+from utils import cfg_read_names
 
 # checking running this script only one instance
 count = 0
 for p in psutil.process_iter():
     if 'python' in p.name() and '.exe' in p.name():
         for cmd_param in p.cmdline():
-            if os.path.basename(__file__) in cmd_param:
+            l = re.split(r'[\\\/]', cmd_param)
+            base_name = l[len(l) - 1]
+            if os.path.basename(__file__) == base_name:
                 count = count + 1
 if count > 1:
     print('Script is already running')
@@ -20,7 +24,7 @@ if count > 1:
 
 START = "start>"
 STOP = "stop>"
-PROGRAMS = ["AnyDesk"]
+PROGRAMS = cfg_read_names('main.cfg')
 DIRECTORY = os.path.dirname(os.path.realpath(__file__)) + "\\data\\"
 
 # add to startup
@@ -78,12 +82,12 @@ while True:
         process_running = {}
         for prog in PROGRAMS:
             process_running[prog] = False
-        def winEnumHandler( hwnd, ctx ):
-            if win32gui.IsWindowVisible( hwnd ):
-                name = win32gui.GetWindowText( hwnd )
-                for program_name in PROGRAMS:
-                    if program_name.lower() in name.lower():
-                        process_running[program_name] = True
+            def winEnumHandler( hwnd, ctx ):
+                if win32gui.IsWindowVisible( hwnd ):
+                    name = win32gui.GetWindowText( hwnd )
+                    for program_name in PROGRAMS:
+                        if program_name.lower() in name.lower():
+                            process_running[program_name] = True
         win32gui.EnumWindows( winEnumHandler, None )
         
         # start working
