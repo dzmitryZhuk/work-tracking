@@ -82,12 +82,12 @@ while True:
         process_running = {}
         for prog in PROGRAMS:
             process_running[prog] = False
-            def winEnumHandler( hwnd, ctx ):
-                if win32gui.IsWindowVisible( hwnd ):
-                    name = win32gui.GetWindowText( hwnd )
-                    for program_name in PROGRAMS:
-                        if program_name.lower() in name.lower():
-                            process_running[program_name] = True
+        def winEnumHandler( hwnd, ctx ):
+            if win32gui.IsWindowVisible( hwnd ):
+                name = win32gui.GetWindowText( hwnd )
+                for program_name in PROGRAMS:
+                    if program_name.lower() in name.lower():
+                        process_running[program_name] = True
         win32gui.EnumWindows( winEnumHandler, None )
         
         # start working
