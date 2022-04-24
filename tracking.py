@@ -24,7 +24,7 @@ if count > 1:
 
 START = "start>"
 STOP = "stop>"
-PROGRAMS = cfg_read_names('main.cfg')
+PROGRAMS = cfg_read_names(os.path.dirname(os.path.realpath(__file__)) + '\\main.cfg')
 DIRECTORY = os.path.dirname(os.path.realpath(__file__)) + "\\data\\"
 
 # add to startup

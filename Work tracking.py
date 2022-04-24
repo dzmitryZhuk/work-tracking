@@ -1,3 +1,5 @@
+from threading import Thread
+import os
 from utils import install_python_module
 ### install module PySimpleGUI for showing window then
 install_python_module('PySimpleGUI')
@@ -12,7 +14,8 @@ STRING_TITLE = 'Work tracking'
 STRING_NEXT = 'Next'
 STRING_INPUT = 'Input'
 MODULES_NAMES = ['swinlnk', 'psutil']
-CFG_FILE = 'main.cfg'
+CFG_NAME = 'main.cfg'
+CFG_PATH = os.path.dirname(os.path.realpath(__file__)) + '\\' + CFG_NAME
 
 import PySimpleGUI as sg
 
@@ -24,17 +27,27 @@ layout = [ [sg.Push(), sg.Text('Installing modules'), sg.Push()],
                     [sg.Button(STRING_CANSEL), sg.Button(STRING_NEXT, disabled=True)]
                     ]
 ###
-
+stopProgram = False # for synchronize threads
 window = sg.Window(STRING_TITLE, layout, finalize=True)
-for i, name in enumerate(MODULES_NAMES):
-    window.read(timeout=0)
-    if not install_python_module(name):
-        exit(1)
-    progressbar.update(i + 1)
-window[STRING_NEXT].update(disabled=False)
+### installing module in other thread
+def install_modules():
+    global stopProgram
+    for i, name in enumerate(MODULES_NAMES):
+        if(stopProgram):
+            return
+        window.read(timeout=0)
+        if not install_python_module(name):
+            exit(1)
+        progressbar.update(i + 1)
+    window[STRING_NEXT].update(disabled=False)
+
+thread = Thread(target=install_modules)
+thread.start()
+###
 while True:
     event, values = window.read()
     if event == STRING_CANSEL:
+        stopProgram = True
         window.close()
         exit(0)
     if event == STRING_NEXT:
@@ -66,8 +79,9 @@ from utils import stop_python_script
 from utils import cfg_read_names
 from utils import cfg_write_names
 
-PROGRAM_NAMES = cfg_read_names(CFG_FILE)
+PROGRAM_NAMES = cfg_read_names(CFG_PATH)
 block_list.update(PROGRAM_NAMES)
+
 while True:
     event, values = window.read()
     if event == sg.WIN_CLOSED:
@@ -77,13 +91,13 @@ while True:
         if len(block_input.get()):
             PROGRAM_NAMES.append(block_input.get())
             block_input.update('')
-            cfg_write_names(CFG_FILE, PROGRAM_NAMES)
+            cfg_write_names(CFG_PATH, PROGRAM_NAMES)
             block_list.update(PROGRAM_NAMES)
 
     if event == STRING_REMOVE:
         for el in block_list.get():
             PROGRAM_NAMES.remove(el)
-        cfg_write_names(CFG_FILE, PROGRAM_NAMES)
+        cfg_write_names(CFG_PATH, PROGRAM_NAMES)
         block_list.update(PROGRAM_NAMES)
 
     if event == STRING_KILL:
@@ -99,6 +113,6 @@ while True:
             PROGRAM_NAMES.append(block_input.get())
             block_input.update('')
             block_list.update(PROGRAM_NAMES)
-            cfg_write_names(CFG_FILE, PROGRAM_NAMES)
+            cfg_write_names(CFG_PATH, PROGRAM_NAMES)
 
-window.close()   
+window.close()
