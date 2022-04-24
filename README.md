@@ -14,3 +14,5 @@ ____
 
 To start tracking work u need only double-click on `tracking.pyw`
 First running this script place shortcut to Windows autorun, so it'll be running always automatically.
+
+`Work tracking.py` file helps to configure some settings of tracked programs
