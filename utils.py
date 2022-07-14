@@ -2,6 +2,9 @@ import psutil
 import os
 import re
 import configparser
+import sys
+if sys.version_info.major >= 3 and sys.version_info.minor >= 3:
+    import importlib.util
 
 SPLITTER_FOR_CFG = '|'
 
@@ -17,6 +20,8 @@ def stop_python_script(name=None):
 
 def install_python_module(module=None):
     if module is not None:
+        if module in sys.modules:
+            return True
         return_code = os.system(f'pip install {module}')
         return return_code == 0
     return False    
